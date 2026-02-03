@@ -1,0 +1,1172 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skuy.TV Live</title>
+ 
+
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!--CSS Live TV-->
+
+    <style>
+        :root {
+            /* Sea Color Palette */
+            --deep-ocean: #051937;
+            --mid-ocean: #004d7a;
+            --sea-teal: #008793;
+            --sea-foam: #e0f7fa;
+            --accent-cyan: #00d2ff;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Ubuntu', sans-serif; 
+            background: var(--deep-ocean); 
+            color: #ffffff; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-attachment: fixed; /* Keeps gradient fixed */
+        }
+        
+        /* Sticky Glass Header */
+        header { 
+            text-align: center;
+            padding: 15px 20px; 
+            background: rgba(5, 25, 55, 0.85); /* Dark semi-transparent */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .logo { 
+            font-size: 26px; 
+            font-weight: 700; 
+            color: var(--sea-foam); 
+            text-decoration: none; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        /* Search Section */
+        .search-container {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .search-box {
+            max-width: 550px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input { 
+            width: 100%; 
+            padding: 14px 25px; 
+            border-radius: 50px; 
+            border: 1px solid var(--glass-border); 
+            background: var(--glass-bg); 
+            color: #fff; 
+            font-size: 16px;
+            font-family: 'Ubuntu', sans-serif;
+            outline: none;
+            box-sizing: border-box; 
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .search-box input:focus {
+            background: rgba(0, 77, 122, 0.6);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .search-box input::placeholder {
+            color: #8ab6d6;
+        }
+
+        /* Container */
+        .container { 
+            padding: 0 20px 40px 20px; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            flex: 1; /* Pushes footer down */
+        }
+        
+        /* Category Title */
+        .cat-title { 
+            font-size: 18px; 
+            font-weight: 500; 
+            color: var(--sea-foam);
+            margin-top: 35px; 
+            margin-bottom: 20px; 
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Decorative Line */
+        .cat-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--sea-teal), transparent);
+            margin-left: 15px;
+            opacity: 0.5;
+        }
+        
+        /* Grid Layout */
+        .grid { display: grid; gap: 20px; }
+        
+        /* Mobile: 3 Columns */
+        @media (max-width: 600px) { 
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } 
+            .logo { font-size: 24px; }
+            .search-container { padding: 25px 15px; }
+            .card-title { font-size: 11px; padding: 8px 4px; }
+        }
+        /* Tablet: 4 Columns */
+        @media (min-width: 601px) and (max-width: 1024px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+        /* Desktop: 5 Columns */
+        @media (min-width: 1025px) { .grid { grid-template-columns: repeat(5, 1fr); } }
+
+        /* Card Design - Liquid Glass */
+        .card { 
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border);
+            border-radius: 15px; 
+            overflow: hidden; 
+            text-decoration: none; 
+            display: block; 
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card:hover { 
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: var(--accent-cyan);
+        }
+        
+        /* Image Wrapper */
+        .card-img-wrap { 
+            width: 100%; 
+            aspect-ratio: 1 / 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px; 
+            box-sizing: border-box; 
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        }
+        
+        .card img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            transition: transform 0.3s;
+        }
+
+        .card:hover img { transform: scale(1.1); }
+        
+        /* Title */
+        .card-title { 
+            padding: 12px 10px; 
+            font-size: 13px; 
+            text-align: center; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            color: var(--sea-foam);
+            background: rgba(0, 0, 0, 0.2);
+            font-weight: 400;
+        }
+        
+        .card:hover .card-title { 
+            color: #fff;
+            background: var(--sea-teal);
+        }
+
+        /* Footer */
+        footer { 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin-top: auto; /* Ensures footer stays at bottom */
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid var(--glass-border);
+        }
+        footer h3 { margin: 0 0 10px 0; color: var(--accent-cyan); font-size: 20px; font-weight: 500; }
+        footer p { font-size: 13px; color: #a0c4ff; margin: 5px 0; }
+        
+        .dev-info {
+            font-size: 12px;
+            color: var(--sea-foam);
+            opacity: 0.6;
+            margin-top: 15px;
+        }
+
+        /* Error Message */
+        .error-msg { text-align: center; padding: 80px; color: var(--sea-foam); }
+
+/* ===== ACTION BUTTONS - FIXED NS PLAYER BUTTON SIZE ===== */
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  text-align: center;
+  min-height: 50px; /* Consistent height */
+  touch-action: manipulation; /* Better touch handling */
+}
+
+/* ns player button - FIXED SIZE */
+.ns-btn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: #ffffff;
+  min-height: 50px; /* Explicitly set same as others */
+  height: auto;
+  line-height: normal;
+}
+
+.ns-btn:hover {
+  background: var(--glass-bg);
+  transform: translateY(-2px);
+  
+}
+
+/* Style tombol utama */
+.dropbtn {
+    background-color: var(--glass-bg);
+    color: var(--sea-foam);
+    padding: 16px;
+    font-size: 16px;
+    border: 1px solid var(--glass-border);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Warna background dari tombol utama ketika isi konten dropdown ditampilkan */
+.dropdown:hover .dropbtn {
+    background-color: var(--glass-bg);
+}
+
+/* Isi dari <div> - Diperlukan untuk memposisikan isi konten dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Isi konten dropdown (disembunyikan) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Link di dalam menu dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Warna link di dalam dropdown ketika disorot */
+.dropdown-content a:hover {
+ background-color:#ddd;
+ color: black;
+}
+
+/* Tampilkan isi konten dopdown ketika disorot */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+</style>
+</head>
+<body>
+  <!-- Header Live TV -->
+
+<header>
+    <a href="#" class="logo">VISION +</a>
+</header>
+
+  <!-- ns player btn-->
+
+    <div class="action-buttons">
+      <a href="https://play.google.com/store/apps/details?id=com.genuine.leone" target="_blank" class="action-btn ns-btn">
+         Instal ▶️ NS PLAYER Di Sini Untuk Memutar Semua Channel
+      </a>
+    </div>
+
+  <!-- Menu Pencarian -->
+
+<div class="search-container">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Cari channels..." onkeyup="filterChannels()" autocomplete="off">
+    </div>
+</div>
+
+  <!--Dropdown Menu-->
+
+<div class="dropdown">
+  <button class="dropbtn">Kategori</button>
+  <div class="dropdown-content">
+    <a href="#">Sub Menu 1</a>
+    <a href="#">Sub Menu 2</a>
+    <a href="#">Sub Menu 3</a>
+  </div>
+</div>
+
+
+<!----------------SPORTS----------------->     
+  
+<div class="container">
+                        <div class="category-section" data-cat="Olahraga">
+                <h2 class="cat-title">Olahraga</h2>
+                <div class="grid">
+                                        
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/89a6e4261cd7470f83e5869e90440cff/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=39C4DC6704CF4CEEA2FD4863B88D8A7D:4E9D7954C2FF46759289DA4FC9F018EA#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sportstar">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/652/652-LOGO-m.png" alt="sportstar" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPORTSTAR</div>
+                        </a>
+
+                         
+                                   
+                                            <a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/d2c68a3dfb644808b416bd90dcc92d5f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=911E72ADF36946AFBDBB4F80782A8394:08AEC548A851BA64B7172AE7F05CB91C#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sportstar2">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/653/653-LOGO-m.png" alt="sportstar2" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPORTSTAR 2</div>
+                        </a>
+                           
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/9a06560796f441a3981cd5a27c7d917f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=ac900f4053fa420095fb84f491f7a331:59748725964ff275e524af73792c8ad4#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sportstar3">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/654/654-LOGO-m.png" alt="sportstar3" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPORTSTAR 3</div>
+                        </a>
+
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/2fcc58ccec8c45e9aa094fb980eb642d/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=b576e5f5f1bc4cbaa866e5b0face5a30:3377be6c3b5f688ebed687312c9b9d95#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sportstar4">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/691/691-LOGO-m.png" alt="sportstar4" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPORTSTAR 4</div>
+                        </a>
+
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/63c0da12bb4d48afbaf053f51dff2353/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=4035323a7fe64767ab8f3345ed9b93be:67377b8d429603f8bf30c161bda269e5#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="soccerchannel">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/655/655-LOGO-m.png" alt="soccerchannel" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SOCCER CH</div>
+                        </a>
+
+                                            <a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/b4814ae93ca84dd3bb5b0aff76ca263f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=3197F7F5086C4315AF2B7A94BC9201CB:17462A74739AE0D9855705FFC2C0E1B5#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="spotv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/856/522856-LOGO-m.png" alt="spotv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPOTV</div>
+                        </a>
+
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/46d9cf39b9a84183b8d5022ac8f4bc41/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=1539F043249E413D91906036F305831E:671E24FD8D234C7F38D85055815F902A#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="spotv2">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/366/525366-LOGO-m.png" alt="spotv2" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SPOTV 2</div>
+                        </a>
+
+                                            <a href="intent://d6m3sfa7e58z5.cloudfront.net/out/v1/3b0660e05eed4d769521eb0275aab3ab/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=3AE6A430C1B8420EA280E317143D8D3A:142473EE925DB0DB0083C74A178C8298#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="beinsport">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/865/522865-LOGO-m.png" alt="beinsport" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BEIN SPORT</div>
+                        </a>
+                                            <a href=" intent://d6m3sfa7e58z5.cloudfront.net/out/v1/cfca527d0f16403396a71b2d3d54c32f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=3D756D566CA94E6499518FFB1474D5D0:DBE4AD6803E74739B8F954D23CC58E7B#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="beinsport2">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/772/198772-LOGO-m.png" alt="beinsport2" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BEIN SPORT 2</div>
+                        </a>
+                                            <a href="intent://d6m3sfa7e58z5.cloudfront.net/out/v1/a265695db5cb461095cbfefc02ad793b/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=344D320CA45641A88CF002DB351ED9A4:246CC6EE7AB235CB824ED3B904B7040B#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="beinsport3">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/770/198770-LOGO-m.png" alt="beinsport3" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BEIN SPORT 3</div>
+                        </a>
+                                            <a href="intent://d6m3sfa7e58z5.cloudfront.net/out/v1/2e55bc8199044c27b1dbb827af65a04f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=AEF1823177AD40199DE440504D992AD5:B95C919408EEC7663214A9A67AF831BA#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="beinsport4">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/884/522884-LOGO-m.png" alt="beinsport4" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BEIN SPORT 4</div>
+                       </a>
+
+                                            <a href="intent://d6m3sfa7e58z5.cloudfront.net/out/v1/fe4d00f07e2f43b789102b84b4d243a9/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=C48C8E48DBA24420B5DCEF9F5B847B12:DAAD0AEB165B9A26B706F2A261B8FAFE#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="beinsport5">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/898/198898-LOGO-m.png" alt="beinsport5" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BEIN SPORT 5</div>
+                       </a>
+
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/73b7057c72da4615888a11b02a6cbb3c/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=AA00F320F06247DCAF8E3CEA1FB07F44:6169DD042BB5E59D709272B614011BBB#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="fighsports">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/658/658-LOGO-m.png" alt="fightsports" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">FIGHT SPORTS</div>
+                       </a>
+
+<a href="intent://d2o5iwa2ppb5z7.cloudfront.net/out/v1/dash/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+sports">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/883/124883-LOGO-m.png" alt="v+sports" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ SPORTS</div>
+                       </a>
+
+
+<a href="intent://d2o5iwa2ppb5z7.cloudfront.net/out/v1/dash/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="r+live">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/817/138817-LOGO-m.png" alt="r+live" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">R+ LIVE</div>
+                       </a>
+
+<a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/6f5596513af749c19d0bcdac013dda3c/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=3FC2384004DF43E6B685B684E1944DF7:CA36136EDA66D731EFDF5FE521106137#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+live">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/273/468273-LOGO-m.png" alt="v+live" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ LIVE</div>
+                       </a>
+
+<a href="intent://d11a9i8aylpmpa.cloudfront.net/out/v1/a34c4f9905a74d66b3d2d2d23170b6b8/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+live2">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/710/112710-LOGO-m.png" alt="v+live2" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ LIVE 2</div>
+                       </a>
+
+<a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/a90cb773466446b08595007bab12b920/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=62F0FB29203C45419E2EA683C5C365E6:10B227A6EA7D65628F025E41318B927C#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+live3">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/148/129148-LOGO-m.png" alt="v+live3" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ LIVE 3</div>
+                       </a>
+
+<a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/2fcc58ccec8c45e9aa094fb980eb642d/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=B576E5F5F1BC4CBAA866E5B0FACE5A30:3377BE6C3B5F688EBED687312C9B9D95#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+live4">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/509/128509-LOGO-m.png" alt="v+live4" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ LIVE 4</div>
+                       </a>
+
+<a href="intent://d84q7nw4qf3j3.cloudfront.net/out/v1/c20d75deb06f401aa89681a9e5054de7/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=55D8BF610E3142408ECFA5295D7EBA39:0774F3AE6EA32F9B4C24896F1FB5BB40#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="v+live5">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/900/514900-LOGO-m.png" alt="v+live5" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">V+ LIVE 5</div>
+                       </a>
+
+
+             </div>   
+            </div>
+
+
+<!----------------LOKAL----------------->   
+
+                    <div class="category-section" data-cat="Lokal">
+                <h2 class="cat-title">Lokal</h2>
+                <div class="grid">
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/997ce8767b604fae9fce05379b3b8b3a/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=D386001215594043A8995DB796AD9E9C:3404792CB4C804902ACDC6CA65C1A298#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="rcti">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/720/507720-LOGO-m.png" alt="rcti" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">RCTI</div>
+                        </a>
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/d6b026ad50f14b7f9af5ddd5450007d4/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=C3004565365A42D08E3BDE39A516D64E:DBFDC0967CFBBED01DBA730C99D9C14A#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="mnctv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/750/507750-LOGO-m.png" alt="mnctv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MNC TV</div>
+                        </a>
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/b8b9b1d5f80f45649b4a3619291551ab/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=036E85DE0BB448EEB21D39AB300DA48E:4C6F9B15DFAB2A169B2B78A498C4D77D#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="gtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/735/507735-LOGO-m.png" alt="gtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">GTV</div>
+                        </a>
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/7b0404cd6a8a4a908123f10774854e46/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=8EE7DF15FF584967A3EB7B885BAFC71E:9A297BF2200EEE7DEE21B9ACE9F57C77#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="inews">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/792/513792-LOGO-m.png" alt="inews" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">INEWS</div>
+                        </a>
+
+                                            <a href="intent://d43tg978oium5.cloudfront.net/out/v1/8c2df39f9b2842fbb997b89378841ad9/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=35E04FCE6DF8473FACD0BDAF08BCF6A9:CD182EDFBB51176B91F0FE079B02CF3B#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sindonewstv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/263/514263-LOGO-m.png" alt="sindonewstv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SINDONEWS TV</div>
+                        </a>
+                                            
+
+                                            <a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/7a69cfc9e135493f87ac4efd63000429/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=764E726A234A435C87A82E4A1DA6A69B:0DE18199EBB3316E3AED8529E39542B7#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="transtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/209/514209-LOGO-m.png" alt="transtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TRANS TV</div>
+                        </a>
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/0fd7b7d368bc44bc9b4dece20acc3e33/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=78477D2156944B7CB35762A47973AA9C:31805B3C0D03080F9ED33411258E5BAF#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="trans7">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/207/514207-LOGO-m.png" alt="trans7" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TRANS 7</div>
+                        </a>
+                                            <a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/9e9aba7068ca4c7f8a73381bef5f8742/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=93D5B9F9D5D14F15B1BA9582F332D1FC:116E4014A662FEF4EA5D7671DD5120D8#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="sctv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/064/569064-LOGO-m.png" alt="sctv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SCTV</div>
+                        </a>
+                                            <a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/bb2b6e6606cb417f807fa017c1a2aa7f/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=AB1FE99E4E4F4CBE95930B3154C1FB19:C7F529DECCBF6709E3E65C61C8D1344F#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="indosiar">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/068/569068-LOGO-m.png" alt="indosiar" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">INDOSIAR</div>
+                        </a>
+
+<a href="intent://d84q7nw4qf3j3.cloudfront.net/out/v1/0a6c6b1534444ab4bd903af8761e6747/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=251C384E846841ABAFA1F7C723D57E66:E45B06A38CD261B74C5160F0912C042F#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="antv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/820/513820-LOGO-m.png" alt="antv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ANTV</div>
+                        </a>
+
+<a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/f3df48faafaf4198a65b9763140fce30/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=EAB667A8F7F14FF7BF00D790314A10F0:1D6693BC942F036053FC1C3C3B3B5032#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tvone">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/822/513822-LOGO-m.png" alt="tvone" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TVONE</div>
+                        </a>
+
+<a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/abf3e254818c4608aab8aa109a972203/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=87484C0B2A4C41B9B08249EF7817AD7F:FF4F3F232F747E5E7F616B4741FA5C32#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="rtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/808/513808-LOGO-m.png" alt="rtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">RTV</div>
+                        </a>
+
+<a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/2f1c4190dcf045c9aafc447d54ef7c91/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=22BD0016090143F795A275629A6E7A0A:CAE11ACCEBE3CA7535141D35F4D41A1D#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="mojitv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/072/569072-LOGO-m.png" alt="mojitv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MOJI TV</div>
+                        </a>
+
+<a href="intent://d84q7nw4qf3j3.cloudfront.net/out/v1/703a71abac3844748b1e68166242d4f3/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=340FF241FF754B038F07096E17104CDC:839BDF4F1523661BA61DF2DC219878A3#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="mentaritv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/076/569076-LOGO-m.png" alt="mentaritv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MENTARI TV</div>
+                        </a>
+
+
+
+
+<a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/dafcaf8b26064ae7b27702088240b535/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=C1E5A6713ACC4774A622D01177224094:D88B67279524D26984F9C0041442B5C6#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="kompastv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/810/513810-LOGO-m.png" alt="kompastv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">KOMPAS TV</div>
+                        </a>
+
+<a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/fd4360b1c12c4375848c8f085fd51d41/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=C64493155D8B443C834A13D4970CF834:509294911AC3C2D779AE2225A23460B4#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="metrotv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/802/513802-LOGO-m.png" alt="metrotv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">METRO TV</div>
+                        </a>
+
+<a href="intent://d2xz2v5wuvgur6.cloudfront.net/out/v1/36d936f64cd2482ebc077567dbcf0919/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=47D8C564B0EB4D6BA83F7B155C827024:098F10E1734D00C0177BAE1236DB60FC#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="btv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/853/513853-LOGO-m.png" alt="btv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BTV</div>
+                        </a>
+
+
+<a href="intent://d84q7nw4qf3j3.cloudfront.net/out/v1/b642f32e396042f981d83fbb5f472272/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tvri">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/812/513812-LOGO-m.png" alt="tvri" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TVRI</div>
+                        </a>
+
+
+<a href="intent://d84q7nw4qf3j3.cloudfront.net/out/v1/6941abe8211d4ce8bd13d9b96bdd1630/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=91DEC6FD9FD84B879AACC027BF532790:588A2214BFB91FC0150B9AC2A745CEF8#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="mdtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/752/507752-LOGO-m.png" alt="mdtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MDTV</div>
+                        </a>
+
+
+<a href="intent://d2tjypxxy769fn.cloudfront.net/out/v1/1f05c642353a4a778d8a544837e1b49c/index.mpd|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=5DFA046B3BF14866A143470D9C8DD74D:97E354284EE7A67E5DAFBCE04E17C4C0#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="jaktv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/832/513832-LOGO-m.png" alt="jaktv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">JAK TV</div>
+                        </a>
+
+<a href="intent://d3b0v7fggu5zwm.cloudfront.net/out/v1/77641c37b4834a9db823ec5137774973/index.mpd%7CdrmScheme=clearkey&drmLicense=994121840707471A920B2E65BDF21B7E:0033AE3118A0153AD05FC9A066A8805C#Intent;scheme=https;type=video/*;package=com.genuine.leone;S.browser_fallback_url=market://details?id=com|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=994121840707471A920B2E65BDF21B7E:0033AE3118A0153AD05FC9A066A8805C#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="jtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/838/513838-LOGO-m.png" alt="jtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">JTV Rek</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="hanacarakatv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/261/514261-LOGO-m.png" alt="hanacarakatv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HONOCOROKO TV</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="balitv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/847/513847-LOGO-m.png" alt="balitv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BALI TV</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="bandungtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/179/514179-LOGO-m.png" alt="bandungtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BANDUNG TV</div>
+                        </a>
+
+
+                </div>
+            </div>
+
+<!----------------HIBURAN----------------->
+
+                    <div class="category-section" data-cat="Hiburan">
+                <h2 class="cat-title">Hiburan</h2>
+                <div class="grid">
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="animax">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/849/522849-LOGO-m.png" alt="animax" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ANIMAX</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="nhkjapan">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/205/514205-LOGO-m.png" alt="nhkjapan" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">NHK JAPAN</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tvn">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/102/458102-LOGO-m.png" alt="tvn" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TVN</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="one">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/854/522854-LOGO-m.png" alt="one" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ONE</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="kix">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/790/522790-LOGO-m.png" alt="kix" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">KIX</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="abc">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/210/514210-LOGO-m.png" alt="abc" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ABC AUSTRALIA</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="rockentertainment">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/847/522847-LOGO-m.png" alt="rockentertainment" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ROCK ENTERTAINMENT</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="axn">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/852/522852-LOGO-m.png" alt="axn" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">AXN</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="lifetime">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/776/522776-LOGO-m.png" alt="lifetime" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">LIFETIME</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="hits">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/788/522788-LOGO-m.png" alt="hits" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HITS</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="hitsnow">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/311/604311-LOGO-m.png" alt="hitsnow" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HITS NOW</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tv5monde">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/357/580357-LOGO-m.png" alt="tv5monde" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TV5 MONDE</div>
+                        </a>
+
+
+
+                                   <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="foodtravel">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/790/507790-LOGO-m.png" alt="foodtravel" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">FOOD TRAVEL</div>
+                        </a>
+
+
+                                   <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="mncentertainment">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/257/514257-LOGO-m.png" alt="mncentertainment" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MNC ENTERTAINMENT</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="celebritytv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/259/514259-LOGO-m.png" alt="celebritytv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CELEBRITY TV</div>
+                        </a>
+
+
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="visionprime">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/499/514499-LOGO-m.png" alt="visionprime" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">VISION PRIME</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="musiktv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/501/514501-LOGO-m.png" alt="musiktv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MUSIK TV</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="hunantv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/218/514218-LOGO-m.png" alt="hunantv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HUNAN TV</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="shanghaidragontv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/238/514238-LOGO-m.png" alt="shanghaidragontv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SHANGHAI DRAGON TV</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="xingkongtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/236/514236-LOGO-m.png" alt="xingkongtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">XINGKONG TV</div>
+                        </a>
+
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="jiangsutv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/240/514240-LOGO-m.png" alt="jiangsutv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">JIANGSU TV</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="anhuitv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/212/514212-LOGO-m.png" alt="anhuitv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ANHUI TV</div>
+                        </a>
+
+
+
+                </div>
+            </div>
+
+
+<!----------------PENGETAHUAN----------------->
+
+                    <div class="category-section" data-cat="Pengetahuan">
+                <h2 class="cat-title">Pengetahuan</h2>
+                <div class="grid">
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="nhkworldpremium">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/636/636-LOGO-m.png" alt="nhkworldpremium" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">NHK WORLD PREMIUM</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="crimeinvestigation">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/850/522850-LOGO-m.png" alt="crimeinvestigation" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CRIME INVESTIGATION</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="outdoorchannel">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/770/522770-LOGO-m.png" alt="outdoorchannel" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">OUTDOOR CHANNEL</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="bbcearth">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/230/494230-LOGO-m.png" alt="bbcearth" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BBC EARTH</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="history">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/772/522772-LOGO-m.png" alt="history" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HISTORY</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="lovenature">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/756/507756-LOGO-m.png" alt="lovenature" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">LOVE NATURE</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="globaltrekker">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/774/522774-LOGO-m.png" alt="globaltrekker" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">GLOBAL TREKKER</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="cgtndocumentary">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/251/514251-LOGO-m.png" alt="cgtndocumentary" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CGTN DOCUMENTARY</div>
+                        </a>
+
+
+                </div>
+            </div>
+
+<!----------------ANAK----------------->
+
+                 <div class="category-section" data-cat="Anak-anak">
+                <h2 class="cat-title">Anak-anak</h2>
+                <div class="grid">
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="kidstv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/255/514255-LOGO-m.png" alt="kidstv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">KIDS TV</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="cbeebies">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/228/494228-LOGO-m.png" alt="cbeebies" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CBEEBIES</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="nick">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/507/514507-LOGO-m.png" alt="nick" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">NICK</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="nickjr">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/505/514505-LOGO-m.png" alt="nickjr" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">NICK JR</div>
+                        </a>
+
+
+                <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="zoomoo">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/503/514503-LOGO-m.png" alt="zoomoo" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ZOOMOO</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="moonbug">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/754/507754-LOGO-m.png" alt="moonbug" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MOONBUG</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="dreamworks">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/509/514509-LOGO-m.png" alt="dreamworks" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">DREAMWORKS</div>
+                        </a>
+
+
+
+               </div>
+            </div>
+
+<!----------------FILM----------------->
+
+                    <div class="category-section" data-cat="Film">
+                <h2 class="cat-title">Film</h2>
+                <div class="grid">
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="originals">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/697/498697-LOGO-m.png" alt="originals" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ORIGINALS</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="buddystar">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/712/498712-LOGO-m.png" alt="buddystar" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">BUDDY STAR</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="uniques">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/703/498703-LOGO-m.png" alt="uniques" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">UNIQUES</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="superrix">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/701/498701-LOGO-m.png" alt="superrix" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">SUPERRIX</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="cineedge">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/699/498699-LOGO-m.png" alt="cineedge " loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CINEEDGE </div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="hitsmovies">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/783/522783-LOGO-m.png" alt="hitsmovies" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">HITS MOVIES</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="celestialmovies">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/778/522778-LOGO-m.png" alt="celestialmovies" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CELESTIAL MOVIES</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="celestialclassicmovies">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/779/522779-LOGO-m.png" alt="celestialclassicmovies" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">CELESTIAL CLASSIC MOVIES</div>
+                        </a>
+                                            
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tvnmovies">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/781/522781-LOGO-m.png" alt="tvnmovies" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TVN MOVIES</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="zeebioskop">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/774/507774-LOGO-m.png" alt="zeebioskop" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ZEE BIOSKOP</div>
+                        </a>
+
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="galaxypremium">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/616/616-LOGO-m.png" alt="galaxypremium" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">GALAXY PREMIUM</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="galaxy">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/617/617-LOGO-m.png" alt="galaxy" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">GALAXY</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="imc">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/342/10342-LOGO-m.png" alt="imc" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">IMC</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="studiouniversal">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/883/575883-LOGO-m.png" alt="studiouniversal" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">STUDIO UNIVERSAL</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="rockaction">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/786/522786-LOGO-m.png" alt="rockaction" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ROCK ACTION</div>
+                        </a>
+
+
+                </div>
+            </div>
+<!----------------AGAMA----------------->
+
+                    <div class="category-section" data-cat="Agama">
+                <h2 class="cat-title">Agama</h2>
+                <div class="grid">
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="tv9">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/189/514189-LOGO-m.png" alt="tv9" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">TV9</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="dmitv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/885/522885-LOGO-m.png" alt="dmitv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">DMI TV</div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="muhammadiyahtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/191/514191-LOGO-m.png" alt="muhammadiyahtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MUHAMMADIYAH TV </div>
+                        </a>
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="muslimtv">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/185/514185-LOGO-m.png" alt="muslimtv" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">MUSLIM TV</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="alquranulkarim">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/186/514186-LOGO-m.png" alt="alquranulkarim" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">ALQURANUL KARIM</div>
+                        </a>
+
+                                            <a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="life">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/182/514182-LOGO-m.png" alt="life" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">LIFE</div>
+                        </a>
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="reformed21">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/193/514193-LOGO-m.png" alt="reformed21" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">REFORMED 21</div>
+                        </a>
+
+
+<a href="|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:145.0) Gecko/20100101 Firefox/145.0&drmScheme=clearkey&drmLicense=#Intent;scheme=https;package=com.genuine.leone;type=video/*;end" class="card channel-item" data-name="ewtn">
+                            <div class="card-img-wrap">
+                                <img src="https://www.visionplus.id/images/repository/195/514195-LOGO-m.png" alt="ewtn" loading="lazy" onerror="this.src='https://via.placeholder.com/150/004d7a/ffffff/?text=TV'">
+                            </div>
+                            <div class="card-title">EWTN</div>
+                        </a>
+
+
+
+               </div>
+            </div>
+                    
+                                    
+            
+</div>
+</div>
+<footer>
+  
+  <h3>Skuy.TV Live</h3>
+    <p>Premium Online Live TV Streaming Platform.</p>
+    <p>© 2026 All Rights Reserved.</p>
+    <div class="dev-info">Developed by Esto Wahyudi</div>
+</footer>
+
+<script>
+function filterChannels() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let categories = document.getElementsByClassName('category-section');
+
+    for (let j = 0; j < categories.length; j++) {
+        let channels = categories[j].getElementsByClassName('channel-item');
+        let hasVisible = false;
+
+        for (let i = 0; i < channels.length; i++) {
+            let name = channels[i].getAttribute('data-name');
+            if (name.includes(input)) {
+                channels[i].style.display = "block";
+                hasVisible = true;
+            } else {
+                channels[i].style.display = "none";
+            }
+        }
+        
+        categories[j].style.display = hasVisible ? "block" : "none";
+    }
+}
+</script>
+</body>
+</html>
