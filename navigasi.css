@@ -52,7 +52,7 @@ a:hover {
 @media screen and (max-width: 576px) {
   nav {
     bottom: 1rem;
-    background-color: transparent;
+    background-color: rgb(52, 52, 255);
     justify-content: center;
     align-items: center;
     display: flex;
