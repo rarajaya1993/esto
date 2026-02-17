@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar HTML CSS</title>
+     <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"
+    />
+    <style>
+   
+   @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+a,
+ul,
+li {
+  text-decoration: none;
+  list-style: none;
+  color: rgb(255, 255, 255);
+  transition: all 0.3s;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem 3rem;
+  background-color: rgb(52, 52, 255);
+  position: fixed;
+  width: 100%;
+}
+
+.nav-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  color: white;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+a:hover {
+  color: #777;
+}
+
+.nav-icon {
+  display: none;
+}
+
+@media screen and (max-width: 576px) {
+  nav {
+    bottom: 1rem;
+    background-color: #00013a;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 70px   
+  }
+
+  .nav-menu {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    background-color: #00013a;
+    border-radius: 15px;
+  }
+
+  .nav-icon {
+    display: block;
+    font-size: 2rem;
+   
+  }
+
+  .nav-text {
+    display: none;
+  }
+
+  .nav-name {
+    display: none;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <nav>
+   <ul class="nav-menu">
+        <li>
+          <a href="#">
+            <span class="nav-text">LIVE EVENT</span>
+            <i class="uil uil-trophy nav-icon"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="nav-text">LIVE TV</span>
+            <i class="uil uil-tv-retro nav-icon"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="nav-text">DOWNLOAD APK</span>
+            <i class="uil uil-download-alt nav-icon"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="nav-text">NOTIFIKASI</span>
+            <i class="uil uil-bell nav-icon"></i>
+          </a>
+        </li>
+          <li>
+          <a href="#">
+            <span class="nav-text">KELUAR</span>
+            <i class="uil uil-arrow-right nav-icon"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </body>
+</html>
